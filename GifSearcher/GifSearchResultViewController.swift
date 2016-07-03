@@ -13,7 +13,7 @@ import Alamofire
 class GifSearchResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, GifCollectionViewLayoutDelegate {
     
     var searchTerms: String!
-    private var gifFeed = GifFeedModule(type: .Search)
+    private var gifFeed = GifFeedModel(type: .Search)
     private var collectionView: UICollectionView!
     private let rating = Constants.preferredSearchRating
     private var loaded: Bool = false

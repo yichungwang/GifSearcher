@@ -1,5 +1,5 @@
 //
-//  GifFeedModule.swift
+//  GifFeedModel.swift
 //  GifSearch
 //
 //  Created by Daydreamer on 6/29/16.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class GifFeedModule {
+class GifFeedModel {
     
     private var maxgifs = Constants.searchResultsLimit
     var currentOffset = 0

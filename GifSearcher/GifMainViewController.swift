@@ -13,7 +13,7 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var gifFeed = GifFeedModule(type: .Trending)
+    private var gifFeed = GifFeedModel(type: .Trending)
     private var searchBar: UISearchBar!
     private var refreshControl: UIRefreshControl!
     private var loaded: Bool = false
