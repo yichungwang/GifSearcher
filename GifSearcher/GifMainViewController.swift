@@ -155,9 +155,9 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
                 self.loaded = true
                 self.collectionView.reloadData()
                 self.loadMoreFeed()
-            } else if let _ = error {
-                // let alert = self.alertControllerWithMessage(error)
-                //self.presentViewController(alert, animated: true, completion: nil)
+            } else if let error = error {
+                let alert = self.alertControllerWithMessage(error)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         })
     }
@@ -177,9 +177,9 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
                     }, completion: { done -> Void in
                         
                 })
-            } else if let _ = error {
-                //let alert = self.alertControllerWithMessage(error)
-                //self.presentViewController(alert, animated: true, completion: nil)
+            } else if let error = error {
+                let alert = self.alertControllerWithMessage(error)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         })
     }
@@ -187,7 +187,7 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: UIScrollView Delegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 {
+        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable {
             loadMoreFeed()
         }
     }

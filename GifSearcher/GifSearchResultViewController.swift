@@ -113,9 +113,9 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
                 self.loaded = true
                 self.collectionView.reloadData()
                 self.loadMoreFeed()
-            } else if let _ = error {
-                //let alert = self.alertControllerWithMessage(error)
-                //self.presentViewController(alert, animated: true, completion: nil)
+            } else if let error = error {
+                let alert = self.alertControllerWithMessage(error)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         })
     }
@@ -135,9 +135,9 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
                     }, completion: { done -> Void in
                         
                 })
-            } else if let _ = error {
-                //let alert = self.alertControllerWithMessage(error)
-                //self.presentViewController(alert, animated: true, completion: nil)
+            } else if let error = error {
+                let alert = self.alertControllerWithMessage(error)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         })
     }
@@ -145,7 +145,7 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
     // MARK: UIScrollView Delegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 { // to load more feed or not
+        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable { // to load more feed or not
             loadMoreFeed()
         }
     }
