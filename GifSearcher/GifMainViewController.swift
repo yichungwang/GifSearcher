@@ -13,11 +13,11 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var gifFeed = GifFeedModel(type: .Trending)
-    private var searchBar: UISearchBar!
-    private var refreshControl: UIRefreshControl!
-    private var loaded: Bool = false
-    private var reachability: NetworkReachabilityManager!
+    fileprivate var gifFeed = GifFeedModel(type: .trending)
+    fileprivate var searchBar: UISearchBar!
+    fileprivate var refreshControl: UIRefreshControl!
+    fileprivate var loaded: Bool = false
+    fileprivate var reachability: NetworkReachabilityManager!
     
     // MARK: View
     
@@ -29,8 +29,8 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
         searchBar.placeholder = "Search"
         searchBar.delegate = self
         searchBar.barTintColor = UIColor.init(white: 0.95, alpha: 1.0)
-        searchBar.tintColor = UIColor.darkGrayColor()
-        searchBar.layer.borderColor = UIColor.whiteColor().CGColor
+        searchBar.tintColor = UIColor.darkGray
+        searchBar.layer.borderColor = UIColor.white.cgColor
         searchBar.layer.borderWidth = 0.5
         self.view.addSubview(searchBar)
         
@@ -38,11 +38,11 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
         if let layout = collectionView.collectionViewLayout as? GifCollectionViewLayout {
             layout.delegate = self
         }
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.backgroundColor = UIColor.white
         
         // refresh control
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(GifMainViewController.refreshFeed), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(GifMainViewController.refreshFeed), for: .valueChanged)
         collectionView.addSubview(refreshControl)
         
         // reachability
@@ -69,20 +69,20 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshControl.endRefreshing()
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.willRotateToInterfaceOrientation(UIApplication.sharedApplication().statusBarOrientation, duration: 0)
+        self.willRotate(to: UIApplication.shared.statusBarOrientation, duration: 0)
         collectionView.contentInset = UIEdgeInsetsMake(44 + Constants.cellPadding, Constants.cellPadding, Constants.cellPadding, Constants.cellPadding)
         collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(44, 0, 0, 0)
     }
@@ -95,18 +95,18 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func updateNoInternetOverlay() {
         self.noInternetOverlay.backgroundColor = Constants.Red
-        if UIApplication.sharedApplication().statusBarOrientation == .Portrait || UIApplication.sharedApplication().statusBarOrientation == .PortraitUpsideDown {
-            self.noInternetOverlay.frame = CGRectMake(0, 64, ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 40)
+        if UIApplication.shared.statusBarOrientation == .portrait || UIApplication.shared.statusBarOrientation == .portraitUpsideDown {
+            self.noInternetOverlay.frame = CGRect(x: 0, y: 64, width: ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 40)
         } else {
-            self.noInternetOverlay.frame = CGRectMake(0, 44 + ((UIDevice.currentDevice().userInterfaceIdiom == .Pad) ? 20 : 0), ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 40)
+            self.noInternetOverlay.frame = CGRect(x: 0, y: 44 + ((UIDevice.current.userInterfaceIdiom == .pad) ? 20 : 0), width: ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 40)
         }
     }
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        if toInterfaceOrientation == .Portrait || UIApplication.sharedApplication().statusBarOrientation == .PortraitUpsideDown {
-            searchBar.frame = CGRectMake(0, 20, ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 44)
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        if toInterfaceOrientation == .portrait || UIApplication.shared.statusBarOrientation == .portraitUpsideDown {
+            searchBar.frame = CGRect(x: 0, y: 20, width: ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 44)
         } else {
-            searchBar.frame = CGRectMake(0, (UIDevice.currentDevice().userInterfaceIdiom == .Pad) ? 20 : 0, ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 44)
+            searchBar.frame = CGRect(x: 0, y: (UIDevice.current.userInterfaceIdiom == .pad) ? 20 : 0, width: ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 44)
         }
         if !reachability.isReachable {
             updateNoInternetOverlay()
@@ -116,26 +116,26 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: UISearchBar Delegate
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !reachability.isReachable {
             let alert = alertControllerWithMessage("Please make sure you are connected to the internet and try again.")
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             return
         }
-        if let searchTerms = searchBar.text where searchTerms != "" {
+        if let searchTerms = searchBar.text, searchTerms != "" {
             let result = GifSearchResultViewController()
             result.searchTerms = searchTerms
             self.navigationController?.pushViewController(result, animated: true)
         }
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         view.endEditing(true)
         searchBar.showsCancelButton = false
     }
     
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.showsCancelButton = true
         return true
     }
@@ -157,7 +157,7 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
                 self.loadMoreFeed()
             } else if let error = error {
                 let alert = self.alertControllerWithMessage(error)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
@@ -167,46 +167,46 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
             if succeed, let total = total {
                 self.collectionView.performBatchUpdates({
                     
-                    var indexPaths = [NSIndexPath]()
+                    var indexPaths = [IndexPath]()
                     for i in (self.gifFeed.currentOffset - total)..<self.gifFeed.currentOffset {
-                        let indexPath = NSIndexPath.init(forItem: i, inSection: 0)
+                        let indexPath = IndexPath.init(item: i, section: 0)
                         indexPaths.append(indexPath)
                     }
-                    self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                    self.collectionView.insertItems(at: indexPaths)
                     
                     }, completion: { done -> Void in
                         
                 })
             } else if let error = error {
                 let alert = self.alertControllerWithMessage(error)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
     
     // MARK: UIScrollView Delegate
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if collectionView.bounds.intersects(CGRect(x: 0, y: collectionView.contentSize.height - Constants.screenHeight / 2, width: collectionView.frame.width, height: Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable {
             loadMoreFeed()
         }
     }
     
     // MARK: UICollectionView Data Source
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return gifFeed.gifsArray.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! GifCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! GifCollectionViewCell
         cell.gif = gifFeed.gifsArray[indexPath.item]
         return cell
     }
     
     // MARK: UICollectionView Delegate
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         searchBar.text = ""
         view.endEditing(true)
         searchBar.showsCancelButton = false
@@ -214,7 +214,7 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: GifCollectionViewLayout Delegate
     
-    func collectionView(collectionView: UICollectionView, heightForGifAtIndexPath indexPath: NSIndexPath, fixedWidth: CGFloat) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, heightForGifAtIndexPath indexPath: IndexPath, fixedWidth: CGFloat) -> CGFloat {
         let gif = gifFeed.gifsArray[indexPath.item]
         let gifHeight = gif.height * fixedWidth / gif.width
         return gifHeight

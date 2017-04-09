@@ -13,11 +13,11 @@ import Alamofire
 class GifSearchResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, GifCollectionViewLayoutDelegate {
     
     var searchTerms: String!
-    private var gifFeed = GifFeedModel(type: .Search)
-    private var collectionView: UICollectionView!
-    private let rating = Constants.preferredSearchRating
-    private var loaded: Bool = false
-    private var reachability: NetworkReachabilityManager!
+    fileprivate var gifFeed = GifFeedModel(type: .search)
+    fileprivate var collectionView: UICollectionView!
+    fileprivate let rating = Constants.preferredSearchRating
+    fileprivate var loaded: Bool = false
+    fileprivate var reachability: NetworkReachabilityManager!
     
     // MARK: View
     
@@ -27,11 +27,11 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
             searchTerms = ""
         }
         if searchTerms.characters.count > 15 {
-            self.title = searchTerms.substringWithRange(Range<String.Index>(searchTerms.startIndex.advancedBy(0)..<searchTerms.startIndex.advancedBy(14))) + "..."
+            self.title = searchTerms.substring(with: Range<String.Index>(searchTerms.index(searchTerms.startIndex, offsetBy: 0)..<searchTerms.index(searchTerms.startIndex, offsetBy: 14))) + "..."
         } else {
             self.title = searchTerms
         }
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         
         // collection view
         let layout = GifCollectionViewLayout()
@@ -40,9 +40,9 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
         collectionView = UICollectionView.init(frame: self.view.bounds, collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.backgroundColor = UIColor.white
         collectionView.contentInset = UIEdgeInsetsMake(Constants.cellPadding, Constants.cellPadding, Constants.cellPadding, Constants.cellPadding)
-        collectionView.registerClass(GifCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(GifCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         self.view.addSubview(collectionView)
         
         // reachability
@@ -73,24 +73,24 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.willRotateToInterfaceOrientation(UIApplication.sharedApplication().statusBarOrientation, duration: 0)
+        self.willRotate(to: UIApplication.shared.statusBarOrientation, duration: 0)
     }
     
     func updateNoInternetOverlay() {
         self.noInternetOverlay.backgroundColor = Constants.Red
-        if UIApplication.sharedApplication().statusBarOrientation == .Portrait || UIApplication.sharedApplication().statusBarOrientation == .PortraitUpsideDown {
-            self.noInternetOverlay.frame = CGRectMake(0, 64, ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 40)
+        if UIApplication.shared.statusBarOrientation == .portrait || UIApplication.shared.statusBarOrientation == .portraitUpsideDown {
+            self.noInternetOverlay.frame = CGRect(x: 0, y: 64, width: ((Constants.screenHeight < Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 40)
         } else {
-            self.noInternetOverlay.frame = CGRectMake(0, 32 + ((UIDevice.currentDevice().userInterfaceIdiom == .Pad) ? 32 : 0), ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), 40)
+            self.noInternetOverlay.frame = CGRect(x: 0, y: 32 + ((UIDevice.current.userInterfaceIdiom == .pad) ? 32 : 0), width: ((Constants.screenHeight > Constants.screenWidth) ? Constants.screenHeight : Constants.screenWidth), height: 40)
         }
     }
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         if !reachability.isReachable {
             updateNoInternetOverlay()
         }
         var rect = collectionView.frame
-        if toInterfaceOrientation == .Portrait || UIApplication.sharedApplication().statusBarOrientation == .PortraitUpsideDown {
+        if toInterfaceOrientation == .portrait || UIApplication.shared.statusBarOrientation == .portraitUpsideDown {
             if collectionView.frame.height < collectionView.frame.width {
                 rect.size.width = collectionView.frame.height
                 rect.size.height = collectionView.frame.width
@@ -115,7 +115,7 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
                 self.loadMoreFeed()
             } else if let error = error {
                 let alert = self.alertControllerWithMessage(error)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
@@ -125,46 +125,46 @@ class GifSearchResultViewController: UIViewController, UICollectionViewDelegate,
             if succeed, let total = total {
                 self.collectionView.performBatchUpdates({
                     
-                    var indexPaths = [NSIndexPath]()
+                    var indexPaths = [IndexPath]()
                     for i in (self.gifFeed.currentOffset - total)..<self.gifFeed.currentOffset {
-                        let indexPath = NSIndexPath.init(forItem: i, inSection: 0)
+                        let indexPath = IndexPath.init(item: i, section: 0)
                         indexPaths.append(indexPath)
                     }
-                    self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                    self.collectionView.insertItems(at: indexPaths)
                     
                     }, completion: { done -> Void in
                         
                 })
             } else if let error = error {
                 let alert = self.alertControllerWithMessage(error)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
     
     // MARK: UIScrollView Delegate
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if CGRectIntersectsRect(collectionView.bounds, CGRectMake(0, collectionView.contentSize.height - Constants.screenHeight / 2, CGRectGetWidth(collectionView.frame), Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable { // to load more feed or not
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if collectionView.bounds.intersects(CGRect(x: 0, y: collectionView.contentSize.height - Constants.screenHeight / 2, width: collectionView.frame.width, height: Constants.screenHeight / 2)) && collectionView.contentSize.height > 0 && reachability.isReachable { // to load more feed or not
             loadMoreFeed()
         }
     }
     
     // MARK: UICollectionView Data Source
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return gifFeed.gifsArray.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! GifCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! GifCollectionViewCell
         cell.gif = gifFeed.gifsArray[indexPath.item]
         return cell
     }
     
     // MARK: GifCollectionViewLayout Delegate
     
-    func collectionView(collectionView: UICollectionView, heightForGifAtIndexPath indexPath: NSIndexPath, fixedWidth: CGFloat) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, heightForGifAtIndexPath indexPath: IndexPath, fixedWidth: CGFloat) -> CGFloat {
         let gif = gifFeed.gifsArray[indexPath.item]
         let gifHeight = gif.height * fixedWidth / gif.width
         return gifHeight

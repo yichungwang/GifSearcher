@@ -13,8 +13,8 @@ import Alamofire
 struct Constants {
     
     static let cellPadding: CGFloat = 5.0
-    static let screenHeight: CGFloat = UIScreen.mainScreen().bounds.height
-    static let screenWidth: CGFloat = UIScreen.mainScreen().bounds.width
+    static let screenHeight: CGFloat = UIScreen.main.bounds.height
+    static let screenWidth: CGFloat = UIScreen.main.bounds.width
     
     static let Red = UIColor.init(red: 0.918, green: 0.263, blue: 0.208, alpha: 1.0)
     static let Green = UIColor.init(red: 0.204, green: 0.659, blue: 0.325, alpha: 1.0)

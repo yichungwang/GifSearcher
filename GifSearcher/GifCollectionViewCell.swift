@@ -14,15 +14,15 @@ class GifCollectionViewCell: UICollectionViewCell {
     
     var gif: GifModel? {
         didSet {
-            if let gif = gif, url = gif.url {
-                SDWebImageManager.sharedManager().downloadImageWithURL(NSURL.init(string: url), options: .HighPriority, progress: {(_, _) -> Void in
+            if let gif = gif, let url = gif.url {
+                SDWebImageManager.sharedManager().downloadImageWithURL(URL.init(string: url), options: .HighPriority, progress: {(_, _) -> Void in
                     }, completed: {(image, _, _, _, _) -> Void in
                         if let image = image { // download and cache the gif
                             self.image = image
                         }
                 })
             }
-            if let gif = gif, trended = gif.trended where trended == true { // check if it's necessary to add trended icon
+            if let gif = gif, let trended = gif.trended, trended == true { // check if it's necessary to add trended icon
                 trendedImageView = UIImageView.init(image: UIImage.init(named: Constants.trendedIconName))
             }
         }
@@ -30,7 +30,7 @@ class GifCollectionViewCell: UICollectionViewCell {
     
     var image: UIImage? {
         didSet {
-            if let image = image where imageView != nil {
+            if let image = image, imageView != nil {
                 imageView.image = image
             }
         }
@@ -40,14 +40,14 @@ class GifCollectionViewCell: UICollectionViewCell {
     var trendedImageView: UIImageView? {
         didSet {
             if let trendedImageView = trendedImageView {
-                trendedImageView.frame = CGRectMake(Constants.cellPadding * 2, Constants.cellPadding * 2, Constants.trendedIconSize, Constants.trendedIconSize)
+                trendedImageView.frame = CGRect(x: Constants.cellPadding * 2, y: Constants.cellPadding * 2, width: Constants.trendedIconSize, height: Constants.trendedIconSize)
                 self.addSubview(trendedImageView)
             }
         }
     }
     
-    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.applyLayoutAttributes(layoutAttributes)
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
         if let attributes = layoutAttributes as? GifLayoutAttributes {
             if imageView == nil {
                 imageView = UIImageView()
@@ -55,7 +55,7 @@ class GifCollectionViewCell: UICollectionViewCell {
                 self.addSubview(imageView)
             }
             // update image view size according to gif size
-            imageView.frame = CGRectMake(Constants.cellPadding, Constants.cellPadding, attributes.gifWidth, attributes.gifHeight)
+            imageView.frame = CGRect(x: Constants.cellPadding, y: Constants.cellPadding, width: attributes.gifWidth, height: attributes.gifHeight)
         }
     }
     

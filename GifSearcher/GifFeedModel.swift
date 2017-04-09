@@ -11,15 +11,15 @@ import UIKit
 
 class GifFeedModel {
     
-    private var maxgifs = Constants.searchResultsLimit
+    fileprivate var maxgifs = Constants.searchResultsLimit
     var currentOffset = 0
-    private var previousOffset = -1
+    fileprivate var previousOffset = -1
     var gifsArray = [GifModel]()
-    private var requesting: Bool = false
-    private var type: feedType = .Trending
+    fileprivate var requesting: Bool = false
+    fileprivate var type: feedType = .trending
     
     enum feedType {
-        case Trending, Search
+        case trending, search
     }
     
     init(type: feedType) {
@@ -34,20 +34,20 @@ class GifFeedModel {
         previousOffset = -1
     }
     
-    func requestFeed(limit: Int, offset: Int, rating: String?, terms: String?, comletionHandler:(succeed: Bool, total: Int?, error: String?) -> Void) {
+    func requestFeed(_ limit: Int, offset: Int, rating: String?, terms: String?, comletionHandler:@escaping (_ succeed: Bool, _ total: Int?, _ error: String?) -> Void) {
         if requesting {
-            comletionHandler(succeed: false, total: nil, error: nil)
+            comletionHandler(false, nil, nil)
             return
         }
         if previousOffset == currentOffset || currentOffset >= maxgifs {
-            comletionHandler(succeed: false, total: nil, error: nil)
+            comletionHandler(false, nil, nil)
             return
         }
         requesting = true
         
         switch type {
             
-        case .Trending:
+        case .trending:
             
             GifWebManager.sharedInstance.queryTrendingGifs(limit, offset: offset, completionHandler: {(gifs, error) -> Void in
                 self.requesting = false
@@ -55,41 +55,41 @@ class GifFeedModel {
                     var newgifs = gifs
                     // check if there are duplicates
                     for newgif in newgifs {
-                        if self.gifsArray.contains({ $0.id == newgif.id }) {
-                            if let i = newgifs.indexOf({ $0.id == newgif.id }) {
-                                newgifs.removeAtIndex(i)
+                        if self.gifsArray.contains(where: { $0.id == newgif.id }) {
+                            if let i = newgifs.index(where: { $0.id == newgif.id }) {
+                                newgifs.remove(at: i)
                             }
                         }
                     }
                     self.previousOffset = self.currentOffset
                     self.currentOffset = self.currentOffset + newgifs.count
-                    self.gifsArray.appendContentsOf(newgifs)
+                    self.gifsArray.append(contentsOf: newgifs)
                     comletionHandler(succeed: true, total: newgifs.count, error: nil)
                 } else {
                     comletionHandler(succeed: false, total: nil, error: error)
                 }
             })
             
-        case .Search:
+        case .search:
             
             GifWebManager.sharedInstance.querySearchGifs(terms!, limit: limit, offset: offset, rating: rating, completionHandler: {(gifs, total, error) -> Void in
                 self.requesting = false
-                if let total = total where total < self.maxgifs {
+                if let total = total, total < self.maxgifs {
                     self.maxgifs = total
                 }
                 if let gifs = gifs {
                     // check if there are duplicates
                     var newgifs = gifs
                     for newgif in newgifs {
-                        if self.gifsArray.contains({ $0.id == newgif.id }) {
-                            if let i = newgifs.indexOf({ $0.id == newgif.id }) {
-                                newgifs.removeAtIndex(i)
+                        if self.gifsArray.contains(where: { $0.id == newgif.id }) {
+                            if let i = newgifs.index(where: { $0.id == newgif.id }) {
+                                newgifs.remove(at: i)
                             }
                         }
                     }
                     self.previousOffset = self.currentOffset
                     self.currentOffset = self.currentOffset + newgifs.count
-                    self.gifsArray.appendContentsOf(newgifs)
+                    self.gifsArray.append(contentsOf: newgifs)
                     comletionHandler(succeed: true, total: newgifs.count, error: nil)
                 } else {
                     comletionHandler(succeed: false, total: nil, error: error)

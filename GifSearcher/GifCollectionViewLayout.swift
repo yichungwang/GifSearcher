@@ -11,7 +11,7 @@ import UIKit
 
 protocol GifCollectionViewLayoutDelegate {
     // use to get the dynamic height of each gif
-    func collectionView(collectionView:UICollectionView, heightForGifAtIndexPath indexPath:NSIndexPath, fixedWidth:CGFloat) -> CGFloat
+    func collectionView(_ collectionView:UICollectionView, heightForGifAtIndexPath indexPath:IndexPath, fixedWidth:CGFloat) -> CGFloat
 }
 
 class GifLayoutAttributes: UICollectionViewLayoutAttributes {
@@ -19,14 +19,14 @@ class GifLayoutAttributes: UICollectionViewLayoutAttributes {
     var gifHeight: CGFloat = 0.0
     var gifWidth: CGFloat = 0.0
     
-    override func copyWithZone(zone: NSZone) -> AnyObject {
-        let copy = super.copyWithZone(zone) as! GifLayoutAttributes
+    override func copy(with zone: NSZone?) -> Any {
+        let copy = super.copy(with: zone) as! GifLayoutAttributes
         copy.gifHeight = gifHeight
         copy.gifWidth = gifWidth
         return copy
     }
     
-    override func isEqual(object: AnyObject?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         if let attributes = object as? GifLayoutAttributes {
             if(attributes.gifHeight == gifHeight && attributes.gifWidth == gifWidth) {
                 return super.isEqual(object)
@@ -40,27 +40,27 @@ class GifLayoutAttributes: UICollectionViewLayoutAttributes {
 class GifCollectionViewLayout: UICollectionViewLayout {
     
     var delegate: GifCollectionViewLayoutDelegate!
-    private var attributes = [GifLayoutAttributes]()
-    private var contentHeight: CGFloat = 0.0
-    private var contentWidth: CGFloat = 0.0
+    fileprivate var attributes = [GifLayoutAttributes]()
+    fileprivate var contentHeight: CGFloat = 0.0
+    fileprivate var contentWidth: CGFloat = 0.0
     
-    override class func layoutAttributesClass() -> AnyClass {
+    override class var layoutAttributesClass : AnyClass {
         return GifLayoutAttributes.self
     }
     
-    override func prepareLayout() {
+    override func prepare() {
         
         var column = 0
         contentHeight = 0
-        contentWidth = CGRectGetWidth(collectionView!.frame) - collectionView!.contentInset.left - collectionView!.contentInset.right
+        contentWidth = collectionView!.frame.width - collectionView!.contentInset.left - collectionView!.contentInset.right
         let itemWidth: CGFloat = floor(contentWidth / 2.0)
         let xOffset: [CGFloat] = [0, itemWidth]
         var yOffset: [CGFloat] = [0, 0] // keep track of y offset of each column
         attributes = []
         
-        for item in 0..<collectionView!.numberOfItemsInSection(0) {
+        for item in 0..<collectionView!.numberOfItems(inSection: 0) {
             
-            let indexPath = NSIndexPath.init(forItem: item, inSection: 0)
+            let indexPath = IndexPath.init(item: item, section: 0)
             let gifWidth = itemWidth - 2 * Constants.cellPadding
             let gifHeight = delegate.collectionView(collectionView!, heightForGifAtIndexPath: indexPath, fixedWidth: gifWidth)
             let itemHeight = gifHeight + 2 * Constants.cellPadding
@@ -71,36 +71,36 @@ class GifCollectionViewLayout: UICollectionViewLayout {
                 column = 0
             }
             
-            let itemFrame = CGRectMake(xOffset[column], yOffset[column], itemWidth, itemHeight)
-            let attribute = GifLayoutAttributes.init(forCellWithIndexPath: indexPath)
+            let itemFrame = CGRect(x: xOffset[column], y: yOffset[column], width: itemWidth, height: itemHeight)
+            let attribute = GifLayoutAttributes.`init`(forCellWith:)(forCellWith: indexPath)
             attribute.frame = itemFrame
             attribute.gifHeight = gifHeight
             attribute.gifWidth = gifWidth
             attributes.append(attribute)
             
             // update content height and y offset
-            contentHeight = max(contentHeight, CGRectGetMaxY(itemFrame))
+            contentHeight = max(contentHeight, itemFrame.maxY)
             yOffset[column] = yOffset[column] + itemHeight
             
         }
         
     }
     
-    override func collectionViewContentSize() -> CGSize {
-        return CGSizeMake(contentWidth, contentHeight)
+    override var collectionViewContentSize : CGSize {
+        return CGSize(width: contentWidth, height: contentHeight)
     }
     
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var layoutAttributes = [UICollectionViewLayoutAttributes]()
         for attribute in attributes {
-            if CGRectIntersectsRect(attribute.frame, rect) {
+            if attribute.frame.intersects(rect) {
                 layoutAttributes.append(attribute)
             }
         }
         return layoutAttributes
     }
     
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return attributes[indexPath.item]
     }
     

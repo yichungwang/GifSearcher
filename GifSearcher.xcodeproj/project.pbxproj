@@ -241,13 +241,17 @@
 				TargetAttributes = {
 					BDE8ED131D28B31600CB0F2A = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = AJZP7J547Y;
+						LastSwiftMigration = 0820;
 					};
 					BDE8ED271D28B31600CB0F2A = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0820;
 						TestTargetID = BDE8ED131D28B31600CB0F2A;
 					};
 					BDE8ED321D28B31600CB0F2A = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0820;
 						TestTargetID = BDE8ED131D28B31600CB0F2A;
 					};
 				};
@@ -457,10 +461,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = AJZP7J547Y;
 				INFOPLIST_FILE = GifSearcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -468,10 +474,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = AJZP7J547Y;
 				INFOPLIST_FILE = GifSearcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -483,6 +491,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcherTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GifSearcher.app/GifSearcher";
 			};
 			name = Debug;
@@ -495,6 +504,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcherTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GifSearcher.app/GifSearcher";
 			};
 			name = Release;
@@ -506,6 +516,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcherUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = GifSearcher;
 			};
 			name = Debug;
@@ -517,6 +528,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Daydreamer.GifSearcherUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = GifSearcher;
 			};
 			name = Release;
@@ -540,6 +552,7 @@
 				BDE8ED3E1D28B31600CB0F2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BDE8ED3F1D28B31600CB0F2A /* Build configuration list for PBXNativeTarget "GifSearcherTests" */ = {
 			isa = XCConfigurationList;
@@ -548,6 +561,7 @@
 				BDE8ED411D28B31600CB0F2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BDE8ED421D28B31600CB0F2A /* Build configuration list for PBXNativeTarget "GifSearcherUITests" */ = {
 			isa = XCConfigurationList;
@@ -556,6 +570,7 @@
 				BDE8ED441D28B31600CB0F2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

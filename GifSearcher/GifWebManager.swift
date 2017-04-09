@@ -14,16 +14,16 @@ class GifWebManager {
     
     static let sharedInstance = GifWebManager()
     
-    private let baseURL = "https://api.giphy.com/"
-    private let giphyAPIKey = "dc6zaTOxFJmzC"
-    private var alamofireManager: Alamofire.Manager!
+    fileprivate let baseURL = "https://api.giphy.com/"
+    fileprivate let giphyAPIKey = "dc6zaTOxFJmzC"
+    fileprivate var alamofireManager: Alamofire.Manager!
     
-    private init() {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    fileprivate init() {
+        let configuration = URLSessionConfiguration.default
         alamofireManager = Alamofire.Manager(configuration: configuration)
     }
     
-    func queryTrendingGifs(limit: Int, offset: Int, completionHandler:(gifs: [GifModel]?, error: String?) -> Void) {
+    func queryTrendingGifs(_ limit: Int, offset: Int, completionHandler:@escaping (_ gifs: [GifModel]?, _ error: String?) -> Void) {
         alamofireManager.request(.GET, baseURL + "v1/gifs/trending", parameters: ["api_key" : giphyAPIKey, "limit" : "\(limit)", "offset" : "\(offset)"], encoding: .URL, headers: nil).responseJSON(completionHandler: { response in
             
             switch response.result {
@@ -46,7 +46,7 @@ class GifWebManager {
         })
     }
     
-    func querySearchGifs(q: String, limit: Int, offset: Int, rating: String?, completionHandler:(gifs: [GifModel]?, total: Int?, error: String?) -> Void) {
+    func querySearchGifs(_ q: String, limit: Int, offset: Int, rating: String?, completionHandler:@escaping (_ gifs: [GifModel]?, _ total: Int?, _ error: String?) -> Void) {
         var ratingStr: String = ""
         if let rating = rating {
             ratingStr = rating
