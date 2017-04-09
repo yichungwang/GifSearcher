@@ -72,7 +72,7 @@ class GifCollectionViewLayout: UICollectionViewLayout {
             }
             
             let itemFrame = CGRect(x: xOffset[column], y: yOffset[column], width: itemWidth, height: itemHeight)
-            let attribute = GifLayoutAttributes.`init`(forCellWith:)(forCellWith: indexPath)
+            let attribute = GifLayoutAttributes.init(forCellWith: indexPath)
             attribute.frame = itemFrame
             attribute.gifHeight = gifHeight
             attribute.gifWidth = gifWidth

@@ -64,9 +64,9 @@ class GifFeedModel {
                     self.previousOffset = self.currentOffset
                     self.currentOffset = self.currentOffset + newgifs.count
                     self.gifsArray.append(contentsOf: newgifs)
-                    comletionHandler(succeed: true, total: newgifs.count, error: nil)
+                    comletionHandler(true, newgifs.count, nil)
                 } else {
-                    comletionHandler(succeed: false, total: nil, error: error)
+                    comletionHandler(false, nil, error)
                 }
             })
             
@@ -90,9 +90,9 @@ class GifFeedModel {
                     self.previousOffset = self.currentOffset
                     self.currentOffset = self.currentOffset + newgifs.count
                     self.gifsArray.append(contentsOf: newgifs)
-                    comletionHandler(succeed: true, total: newgifs.count, error: nil)
+                    comletionHandler(true, newgifs.count, nil)
                 } else {
-                    comletionHandler(succeed: false, total: nil, error: error)
+                    comletionHandler(false, nil, error)
                 }
             })
             

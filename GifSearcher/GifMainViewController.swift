@@ -50,14 +50,14 @@ class GifMainViewController: UIViewController, UICollectionViewDelegate, UIColle
         reachability.startListening()
         reachability.listener = { status -> Void in
             switch status {
-            case .NotReachable:
+            case .notReachable:
                 self.updateNoInternetOverlay()
-            case .Reachable(.EthernetOrWiFi), .Reachable(.WWAN):
+            case .reachable(.ethernetOrWiFi), .reachable(.wwan):
                 (self.loaded == false) ? self.loadFeed() : self.loadMoreFeed()
-                UIView.animateWithDuration(0.4, animations: {
+                UIView.animate(withDuration: 0.4, animations: {
                     self.noInternetOverlay.backgroundColor = Constants.Green
                     }, completion: { done -> Void in
-                        UIView.animateWithDuration(0.3, animations: {
+                        UIView.animate(withDuration: 0.3, animations: {
                             var rect = self.noInternetOverlay.frame
                             rect.size.height = 0
                             self.noInternetOverlay.frame = rect

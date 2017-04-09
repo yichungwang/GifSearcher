@@ -15,11 +15,10 @@ class GifCollectionViewCell: UICollectionViewCell {
     var gif: GifModel? {
         didSet {
             if let gif = gif, let url = gif.url {
-                SDWebImageManager.sharedManager().downloadImageWithURL(URL.init(string: url), options: .HighPriority, progress: {(_, _) -> Void in
-                    }, completed: {(image, _, _, _, _) -> Void in
-                        if let image = image { // download and cache the gif
-                            self.image = image
-                        }
+                SDWebImageManager.shared().loadImage(with: URL.init(string: url), options: .highPriority, progress: nil, completed: { (image, _, _, _, _, _) -> Void in
+                    if let image = image { // download and cache the gif
+                        self.image = image
+                    }
                 })
             }
             if let gif = gif, let trended = gif.trended, trended == true { // check if it's necessary to add trended icon

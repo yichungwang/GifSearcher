@@ -16,18 +16,19 @@ class GifWebManager {
     
     fileprivate let baseURL = "https://api.giphy.com/"
     fileprivate let giphyAPIKey = "dc6zaTOxFJmzC"
-    fileprivate var alamofireManager: Alamofire.Manager!
+    fileprivate var alamofireManager: Alamofire.SessionManager!
     
     fileprivate init() {
         let configuration = URLSessionConfiguration.default
-        alamofireManager = Alamofire.Manager(configuration: configuration)
+        alamofireManager = Alamofire.SessionManager(configuration: configuration)
     }
     
     func queryTrendingGifs(_ limit: Int, offset: Int, completionHandler:@escaping (_ gifs: [GifModel]?, _ error: String?) -> Void) {
-        alamofireManager.request(.GET, baseURL + "v1/gifs/trending", parameters: ["api_key" : giphyAPIKey, "limit" : "\(limit)", "offset" : "\(offset)"], encoding: .URL, headers: nil).responseJSON(completionHandler: { response in
+        
+        alamofireManager.request(baseURL + "v1/gifs/trending", method: .get, parameters: ["api_key" : giphyAPIKey, "limit" : "\(limit)", "offset" : "\(offset)"], encoding: URLEncoding.default).responseJSON(completionHandler: { response in
             
             switch response.result {
-            case .Success(let result):
+            case .success(let result):
                 let resultJSON = JSON.init(result)
                 if let gifdata = resultJSON["data"].array {
                     var gifs = [GifModel]()
@@ -35,12 +36,12 @@ class GifWebManager {
                         let gif = GifModel.init(data: gifJSON)
                         gifs.append(gif)
                     }
-                    completionHandler(gifs: gifs, error: nil)
+                    completionHandler(gifs, nil)
                 } else {
-                    completionHandler(gifs: nil, error: "Something is wrong")
+                    completionHandler(nil, "Something is wrong")
                 }
-            case .Failure(let error):
-                completionHandler(gifs: nil, error: error.localizedDescription)
+            case .failure(let error):
+                completionHandler(nil, error.localizedDescription)
             }
         
         })
@@ -51,10 +52,11 @@ class GifWebManager {
         if let rating = rating {
             ratingStr = rating
         }
-        alamofireManager.request(.GET, baseURL + "v1/gifs/search", parameters: ["api_key" : giphyAPIKey, "limit" : "\(limit)", "offset" : "\(offset)", "rating": ratingStr, "q" : q], encoding: .URL, headers: nil).responseJSON(completionHandler: { response in
+        
+        alamofireManager.request(baseURL + "v1/gifs/search", method: .get, parameters: ["api_key" : giphyAPIKey, "limit" : "\(limit)", "offset" : "\(offset)", "rating": ratingStr, "q" : q], encoding: URLEncoding.default, headers: nil).responseJSON(completionHandler: { response in
             
             switch response.result {
-            case .Success(let result):
+            case .success(let result):
                 let resultJSON = JSON.init(result)
                 var total: Int?
                 if let pagination = resultJSON["pagination"].dictionary {
@@ -68,12 +70,12 @@ class GifWebManager {
                         let gif = GifModel.init(data: gifJSON)
                         gifs.append(gif)
                     }
-                    completionHandler(gifs: gifs, total: total, error: nil)
+                    completionHandler(gifs, total, nil)
                 } else {
-                    completionHandler(gifs: nil, total: nil, error: "Something is wrong")
+                    completionHandler(nil, nil, "Something is wrong")
                 }
-            case .Failure(let error):
-                completionHandler(gifs: nil, total: nil, error: error.localizedDescription)
+            case .failure(let error):
+                completionHandler(nil, nil, error.localizedDescription)
             }
             
         })
