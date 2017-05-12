@@ -1,0 +1,6 @@
+framework module Pods_GifSearcher {
+  umbrella header "Pods-GifSearcher-umbrella.h"
+
+  export *
+  module * { export * }
+}
