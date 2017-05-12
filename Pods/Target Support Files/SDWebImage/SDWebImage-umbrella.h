@@ -20,6 +20,7 @@
 #import "UIImageView+WebCache.h"
 #import "UIView+WebCache.h"
 #import "UIView+WebCacheOperation.h"
+#import "FLAnimatedImageView+WebCache.h"
 #import "UIImage+WebP.h"
 
 FOUNDATION_EXPORT double SDWebImageVersionNumber;

@@ -8,6 +8,7 @@ target 'GifSearcher' do
 pod 'SwiftyJSON'
 pod 'Alamofire'
 pod 'SDWebImage/WebP'
+pod 'SDWebImage/GIF'
 
 end
 

@@ -15,11 +15,7 @@ class GifCollectionViewCell: UICollectionViewCell {
     var gif: GifModel? {
         didSet {
             if let gif = gif, let url = gif.url {
-                SDWebImageManager.shared().loadImage(with: URL.init(string: url), options: .highPriority, progress: nil, completed: { (image, _, _, _, _, _) -> Void in
-                    if let image = image { // download and cache the gif
-                        self.image = image
-                    }
-                })
+                imageView.sd_setImage(with: URL.init(string: url))
             }
             if let gif = gif, let trended = gif.trended, trended == true { // check if it's necessary to add trended icon
                 trendedImageView = UIImageView.init(image: UIImage.init(named: Constants.trendedIconName))
@@ -27,15 +23,7 @@ class GifCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var image: UIImage? {
-        didSet {
-            if let image = image, imageView != nil {
-                imageView.image = image
-            }
-        }
-    }
-    
-    var imageView: UIImageView!
+    var imageView: FLAnimatedImageView!
     var trendedImageView: UIImageView? {
         didSet {
             if let trendedImageView = trendedImageView {
@@ -49,7 +37,7 @@ class GifCollectionViewCell: UICollectionViewCell {
         super.apply(layoutAttributes)
         if let attributes = layoutAttributes as? GifLayoutAttributes {
             if imageView == nil {
-                imageView = UIImageView()
+                imageView = FLAnimatedImageView()
                 imageView.backgroundColor = UIColor.init(white: 0.9, alpha: 1.0)
                 self.addSubview(imageView)
             }
@@ -61,7 +49,7 @@ class GifCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         if imageView != nil {
-            imageView.image = nil
+            imageView.animatedImage = nil
         }
         if trendedImageView != nil {
             trendedImageView?.removeFromSuperview()

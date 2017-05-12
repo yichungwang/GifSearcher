@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FLAnimatedImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-GifSearcher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,7 +47,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>624C5A9D7E41DE757CEDA330D7C13308</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6D9CD6FC65A7E616CFC62A0B3CAE8B05</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>83B5B60C676A8D31829A6AE91CE86A75</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8491AD27E24B76D9CCF9501E967CE560</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -52,17 +72,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A14BBFC9F6A358E7BEBE938B7C2F1971</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>A79DC8F5606F6D28D8D17C45867D0779</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EA320111BA130616E37AED8404B588F5</key>
+		<key>96C3DFD1764FF11DE29D42401FEDD22E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FE7734A7993CD42323C3550AE75E130D</key>
+		<key>F4DD2B662692DC3866C62E390E6C617A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
