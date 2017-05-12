@@ -86,6 +86,11 @@ class GifFeedModel {
                                 newgifs.remove(at: i)
                             }
                         }
+                        if newgif.width == 0 || newgif.height == 0 {
+                            if let i = newgifs.index(where: { $0.id == newgif.id }) {
+                                newgifs.remove(at: i)
+                            }
+                        }
                     }
                     self.previousOffset = self.currentOffset
                     self.currentOffset = self.currentOffset + newgifs.count
